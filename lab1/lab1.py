@@ -48,8 +48,30 @@ def apply_sequence(stack, sequence):
 def breadth_first_search(stack):
     flip_sequence = []
 
-    # --- v ADD YOUR CODE HERE v --- #
-
+    graph = []
+    graph.append((stack, []))
+    explored_set = set()
+    my_deque = deque()
+    my_deque.append((stack, []))
+    
+    while len(my_deque) != 0:
+        current_stack, current_sequence = my_deque.popleft()
+        if current_stack.check_ordered() == True:
+            return current_sequence
+        
+        for flip_position in range(1, current_stack.num_books + 1):
+            new_stack = current_stack.copy()
+            new_stack.flip_stack(flip_position)
+            
+            new_sequence = current_sequence + [flip_position]
+            
+            stack_key = (tuple(new_stack.order), tuple(new_stack.orientations))
+            
+            if stack_key not in explored_set:
+                explored_set.add(stack_key)
+                my_deque.append((new_stack, new_sequence))
+                graph.append((new_stack, new_sequence))
+    
     return flip_sequence
     # ---------------------------- #
 
@@ -57,8 +79,29 @@ def breadth_first_search(stack):
 def depth_first_search(stack):
     flip_sequence = []
 
-    # --- v ADD YOUR CODE HERE v --- #
-
-
+    graph = []
+    graph.append((stack, []))
+    explored_set = set()
+    my_deque = deque()
+    my_deque.append((stack, []))
+    
+    while len(my_deque) != 0:
+        current_stack, current_sequence = my_deque.pop()
+        if current_stack.check_ordered() == True:
+            return current_sequence
+        
+        for flip_position in range(1, current_stack.num_books + 1):
+            new_stack = current_stack.copy()
+            new_stack.flip_stack(flip_position)
+            
+            new_sequence = current_sequence + [flip_position]
+            
+            stack_key = (tuple(new_stack.order), tuple(new_stack.orientations))
+            
+            if stack_key not in explored_set:
+                explored_set.add(stack_key)
+                my_deque.append((new_stack, new_sequence))
+                graph.append((new_stack, new_sequence))
+    
     return flip_sequence
     # ---------------------------- #
